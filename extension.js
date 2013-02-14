@@ -17,6 +17,12 @@
  */
 
 appAPI.ready(function($) {
+    console = {
+        log: function(m) {
+            try {
+                $('#message').append("<br />" + m) }
+            catch(e) { alert(m) } }
+    }
 
     /*
      h = $(".docs-reference-pane-container").css("height");
@@ -28,14 +34,34 @@ appAPI.ready(function($) {
     //alert('initial');
     //alert(typeof _docs_userPreferences );
     //alert('found');
+    //appAPI.dom.addRemoteJS('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js');
+    appAPI.resources.jQueryUI('1.8.9');
+
+
     var blnNoSource = true;
     var activeProjectID = 0;
     var _timer;
     var _initialID = 0;
+    /*
+    $('#makeMeDraggable').draggable({
+        containment: 'window',
+        //helper: myHelper,
+        iframeFix: true
+    });
+    */
 
+    //window.addEventListener("drop", function(e){ e.preventDefault(); alert("drop!"); });
+    //window.addEventListener("mouseup", function(e){ e.preventDefault(); alert("mouse up!"); });
+
+    console.log("no droppable error");
     if(appAPI.matchPages("*docs.google.com/*") && !appAPI.dom.isIframe()){
-
+    //if(appAPI.matchPages("*crossrider2.debug*") && !appAPI.dom.isIframe()){
         var base_url = "http://local.citelighter.com";
+
+        //appAPI.dom.addRemoteJS(base_url + '/assets/front/js/citelighter_libs.js');
+        //appAPI.dom.addRemoteJS(base_url + '/assets/front/js/cust_checkbox_plugin.js');
+
+
 
         $(".goog-sa-pane-inner").hide();
         
@@ -74,7 +100,9 @@ appAPI.ready(function($) {
         }
 
 
+        //appAPI.request.post( "http://crossrider2.debug/index2.html","", function(data) {
         appAPI.request.post( base_url + "/api/gp","", function(data) {
+
             json = JSON.parse(data);
 
             if(json.ok === true){
@@ -105,15 +133,74 @@ appAPI.ready(function($) {
 
                 $('#cl-panel').remove();
                 if($('#cl-panel')){
-                    $('<iframe id="cl-panel" src="" style="position:absolute;z-index:9999; left:0;top:0;background-color:white;width:100%;height:100%;" />').prependTo(".goog-sa-pane-inner");
+                    //$('<iframe id="cl-panel" src="" style="position:absolute;z-index:9999; left:0;top:0;background-color:white;width:100%;height:100%;" />').prependTo(".goog-sa-pane-inner");
+                    //alert('append div');
+                    $('<div id="cl-panel" src="" style="position:absolute;z-index:9999; left:0;top:0;background-color:white;width:100%;height:100%;" ><p>Loading...</p></div>').prependTo(".goog-sa-pane-inner");
                     //$('<iframe id="cl-panel" src="" style="position:absolute;z-index:9999; left:0;top:'+_top_offset+'px;background-color:white;width:100%;height:100%" />').prependTo(".goog-sa-pane-title");
                 }
 
 
                 src_url = base_url + '/project/view/' + p_id + '/false/true';
+                //src_url = "http://crossrider2.debug";
 
                 if(p_id > 0){
-                    $('#cl-panel').attr("src", src_url);
+                    //$('#cl-panel').attr("src", src_url);
+                    $('#cl-panel').html("");
+
+                    //appAPI.request.post( "http://crossrider2.debug/index2.html","", function(data) {
+                    //appAPI.request.post( "http://local.citelighter.com/project/view/21524/false/true","", function(data) {
+                    //alert('ready to request');
+                    appAPI.request.post( src_url, "", function(data) {
+                        json = JSON.parse(data);
+                        //temp
+                        var script = document.createElement("script");
+                        script.src = "http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js";
+                        document.body.appendChild(script);
+
+
+
+                        $('#cl-panel').html(json.html);
+
+                        //set css values
+                        $('.selectable').css({'margin-left': '25px',
+                                             'width':'215px',
+                                             'border': '0 none white',
+                                             'overflow': 'hidden',
+                                             'padding': '0',
+                                             'outline': 'none',
+                                             'resize': 'none'
+                                            });
+
+                        $('.item-number').css({'position':'absolute', "left":"3px"});
+                        $('.cl-item-container').css({'min-height':"40px", "margin-top": "10px"});
+                        $('<style> .selectable::selection{ background-color:#fff2a8; } .selectable::-moz-selection{ background-color:#fff2a8; } .cl-item-container:hover{background-color:#fff2a8;}</style>').insertAfter('body *:last');
+
+                        $(".selectable").mouseenter( function () {
+                           $(this).css('background-color', '#fff2a8');
+                            $(this).select();
+                        });
+
+                        $(".cl-item-container, .citations-list").mouseleave( function () {
+                            $(this).find('.selectable').css('background-color', '#fff');
+                        });
+
+                        $(".cl-item-container").mouseenter( function () {
+                            $(this).find('.selectable').css('background-color', '#fff2a8');
+                        });
+
+
+                        //set textareas to maximum size
+                        var _text = $('.selectable');
+                        $.each(_text, function(key, value){
+                            resize(value);
+                        });
+                        //alert(json.html);
+
+
+                    }, function(e) {
+                        alert("failed");
+                    });
+
                     blnNoSource = false;
                     activeProjectID = p_id;
                     // alert("loaded url");
@@ -124,6 +211,13 @@ appAPI.ready(function($) {
 
             }
 
+        }
+
+        function resize(text){
+            text.focus();
+            text.select();
+            text.style.height = 'auto';
+            text.style.height = text.scrollHeight+'px';
         }
 
 
@@ -149,7 +243,7 @@ appAPI.ready(function($) {
             //alert('prepend after');
             $(_select_html).prependTo('body');
             //$('<div style="background-color:green;position:absolute;width 50px; height: 50px; z-index:9999;">persist</div>').prependTo('.goog-sa-pane-title');
-
+            //alert(_select_html);
             $('#project_list_container').css({'float':'right', 'position':'relative', 'z-index':'999'});
 
             //add change event to select tag

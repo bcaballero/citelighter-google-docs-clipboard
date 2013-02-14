@@ -1,0 +1,101 @@
+<html>
+<head>
+    <title>Woo!</title>
+    <style type="text/css">
+        * {margin: 0; padding:0;}
+        .container { width: 500px; margin: 0 auto; }
+        textarea.selectable { border: 0; resize: none; color: inherit; font: inherit; width: inherit; height: auto; display: block; margin-bottom: 1em; line-height: 1.5em; }
+        textarea.selectable:focus { border: 0; outline: 0; }
+        .selector { font-size: 1em; padding: 10px 20px; display: block; float: left; margin-left: -100px; margin-top: 10px; }
+
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Citations</h1>
+
+
+    <textarea readonly class="selectable" readonly>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+
+    <textarea readonly class="selectable" readonly>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+
+    <textarea readonly class="selectable" readonly>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+
+    <textarea readonly class="selectable" readonly>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+
+    <textarea readonly class="selectable" readonly>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+
+    <textarea readonly class="selectable" readonly>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+    <hr>
+    <p id="selected"></p>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function jq_load () {
+
+        /* attempt to find a text selection */
+        function getSelected() {
+            var t = '';
+            if (window.getSelection) {
+                t = window.getSelection();
+            } else if (document.getSelection) {
+                t = document.getSelection();
+            } else if (document.selection) {
+                t = document.selection.createRange().text;
+            }
+            return t;
+        }
+
+        // Fix textarea height
+        $("textarea").each(function (i, elem) {
+            elem.style.height = "auto";
+            elem.style.height = elem.scrollHeight + "px";
+        })
+        $(".selector").on("click", function () {
+            $(this).next(".selectable").select()
+        })
+
+
+
+        $(".selectable").on("mouseup", function () {
+            $(this).html('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+        });
+
+        $(".selectable").on("mouseleave", function () {
+            $(this).html('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+            console.log('left');
+        });
+
+        $(document).bind("mouseup, click", function (e) {
+            $(".selectable").html('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+            console.log('mouse up');
+            //var mytext = getSelected();
+            //$("#selected").text(getSelected())
+        });
+
+        //$(".selectable").on("mousedown", function () {
+        $(".selectable").mouseenter( function () {
+            $(this).html("some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text ");
+        });
+
+        $(".selectable").mousedown( function () {
+            var _this = $(this);
+            //$(this).html("some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text some dummy text ");
+            _this.select();
+        });
+
+        $(document).bind("dragend", function (e) {
+            $(".selectable").html('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+            console.log('stop!');
+            //var mytext = getSelected();
+            //$("#selected").text(getSelected())
+        })
+
+
+
+
+    })
+</script>
+</body>
+</html>
